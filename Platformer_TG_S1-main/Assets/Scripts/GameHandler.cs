@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public class GameHandler : MonoBehaviour
 {
@@ -13,6 +13,15 @@ public class GameHandler : MonoBehaviour
 
     int score=0;
     bool gameOver = false;
+
+    public static bool slowTime;
+    public static bool immortalityBonus;
+
+    public float slowTimeDelay;
+    float timeFromSlow;
+    public float immortalityDelay;
+    float timeFromImmortality;
+
 
     public GameObject[] healthPointsArray;
     public static bool healthGained;
@@ -62,6 +71,28 @@ public class GameHandler : MonoBehaviour
         trapTriggered = false;
     }
 
+    public void SlowTimeActivated()
+    {
+        GameSpeed = 2;
+        if (timeFromSlow >= slowTimeDelay)
+        {
+            slowTime = false;
+            GameSpeed = 4;
+            timeFromSlow = 0;
+        }
+        timeFromSlow += Time.deltaTime;
+    }
+
+    public void ImmortalityActivated()
+    {
+        if (timeFromImmortality >= immortalityDelay)
+        {
+            immortalityBonus = false;
+            timeFromImmortality = 0;
+        }
+        timeFromImmortality += Time.deltaTime;
+    }
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -69,6 +100,9 @@ public class GameHandler : MonoBehaviour
 		GameSpeed = 4;
 
         healthGained = false;
+        trapTriggered = false;
+        slowTime = false;
+        immortalityBonus = false;
 	}
         
 
@@ -88,7 +122,10 @@ public class GameHandler : MonoBehaviour
         }
         if (trapTriggered)
         {
-            TrapTriggered();
+            if (!immortalityBonus)
+            {
+                TrapTriggered();
+            }
         }
         if (healthGained)
         {

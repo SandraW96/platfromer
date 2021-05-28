@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class PlayerControler : MonoBehaviour
 {
@@ -13,6 +13,9 @@ public class PlayerControler : MonoBehaviour
 
 	private Rigidbody2D rb;
 	public float startingY;
+
+
+    private int numberOfPoints = 0;
 
 
 	public GameObject Stalker;
@@ -30,6 +33,22 @@ public class PlayerControler : MonoBehaviour
         {
             GameHandler.trapTriggered = true;
             Debug.Log("poison");
+        }
+        if (collision.gameObject.tag == "Coin")
+        {
+            numberOfPoints++;
+            Destroy(collision.gameObject, 0);
+            Debug.Log(numberOfPoints);
+        }
+        if (collision.gameObject.tag == "slowTimeBonus")
+        {
+            GameHandler.slowTime = true;
+            Destroy(collision.gameObject, 0);
+        }
+        if (collision.gameObject.tag == "immortalityBonus")
+        {
+            GameHandler.immortalityBonus = true;
+            Destroy(collision.gameObject, 0);
         }
     }
 
